@@ -1,6 +1,5 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Dumbbell, Sparkles, Coffee, Shirt, Heart, Sun } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 const amenities = [
   {
@@ -36,35 +35,36 @@ const amenities = [
 ];
 
 export function AmenitiesSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
 
   return (
     <section id="amenities" className="section-padding bg-cream-dark" ref={ref}>
       <div className="container-luxe">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <p className="section-label">Amenities</p>
           <h2 className="section-title">World-Class Amenities</h2>
           <p className="section-subtitle mx-auto">
             Every detail curated for your comfort and performance
           </p>
-        </motion.div>
+        </div>
 
         {/* Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {amenities.map((amenity, index) => (
-            <motion.div
+            <div
               key={amenity.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card-luxury card-luxury-gold p-8 group"
+              className={`card-luxury card-luxury-gold p-8 group transition-all duration-500 ease-out ${
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ 
+                transitionDelay: `${150 + index * 100}ms`,
+                willChange: 'transform, opacity'
+              }}
             >
               <div className="flex flex-col h-full">
                 <div className="w-14 h-14 flex items-center justify-center bg-gold/10 mb-6 transition-colors duration-300 group-hover:bg-gold/20">
@@ -77,7 +77,7 @@ export function AmenitiesSection() {
                   {amenity.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 const testimonials = [
   {
@@ -27,8 +27,7 @@ const testimonials = [
 ];
 
 export function TestimonialsSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const next = () => {
@@ -47,52 +46,46 @@ export function TestimonialsSection() {
     <section className="section-padding bg-cream" ref={ref}>
       <div className="container-luxe">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <p className="section-label">Testimonials</p>
           <h2 className="section-title">Member Stories</h2>
-        </motion.div>
+        </div>
 
         {/* Testimonial Carousel */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+        <div
+          className={`max-w-4xl mx-auto transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ transitionDelay: '200ms' }}
         >
           <div className="relative text-center px-4 md:px-12">
             {/* Quote Mark */}
             <Quote className="w-16 h-16 text-gold/30 mx-auto mb-8" />
 
-            {/* Quote */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-              >
-                <p className="quote-text mb-10">"{current.quote}"</p>
+            {/* Quote - using CSS transitions instead of AnimatePresence */}
+            <div
+              key={currentIndex}
+              className="animate-fade-in"
+            >
+              <p className="quote-text mb-10">"{current.quote}"</p>
 
-                {/* Author */}
-                <div className="space-y-2">
-                  <p className="font-display text-xl text-navy">
-                    {current.name}
-                  </p>
-                  <p className="text-gold text-sm font-body tracking-wide">
-                    {current.title}
-                  </p>
-                  <p className="text-muted text-xs font-body">
-                    {current.since}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+              {/* Author */}
+              <div className="space-y-2">
+                <p className="font-display text-xl text-navy">
+                  {current.name}
+                </p>
+                <p className="text-gold text-sm font-body tracking-wide">
+                  {current.title}
+                </p>
+                <p className="text-muted text-xs font-body">
+                  {current.since}
+                </p>
+              </div>
+            </div>
 
             {/* Navigation */}
             <div className="flex items-center justify-center gap-4 mt-12">
@@ -129,7 +122,7 @@ export function TestimonialsSection() {
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

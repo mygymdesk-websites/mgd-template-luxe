@@ -1,6 +1,5 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Check } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 const plans = [
   {
@@ -51,39 +50,40 @@ const plans = [
 ];
 
 export function MembershipSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
 
   return (
     <section id="membership" className="section-padding bg-cream" ref={ref}>
       <div className="container-luxe">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <p className="section-label">Membership</p>
           <h2 className="section-title">Select Your Experience</h2>
           <p className="section-subtitle mx-auto">
             Choose the membership that aligns with your wellness aspirations
           </p>
-        </motion.div>
+        </div>
 
         {/* Plans */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {plans.map((plan, index) => (
-            <motion.div
+            <div
               key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className={`relative flex flex-col p-8 transition-all duration-300 ${
+              className={`relative flex flex-col p-8 transition-all duration-500 ease-out ${
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              } ${
                 plan.featured
                   ? 'bg-cream border-2 border-gold shadow-elevated -mt-4 md:scale-105'
                   : 'bg-cream border border-border shadow-card hover:shadow-elevated'
               }`}
+              style={{ 
+                transitionDelay: `${150 + index * 150}ms`,
+                willChange: 'transform, opacity'
+              }}
             >
               {/* Badge */}
               {plan.badge && (
@@ -132,19 +132,19 @@ export function MembershipSection() {
               >
                 {plan.cta}
               </button>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Footer Note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center text-muted text-sm mt-10 font-body"
+        <p
+          className={`text-center text-muted text-sm mt-10 font-body transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ transitionDelay: '600ms' }}
         >
           Annual memberships available with 2 months complimentary
-        </motion.p>
+        </p>
       </div>
     </section>
   );
