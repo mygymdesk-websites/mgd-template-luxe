@@ -2,6 +2,8 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 
+const WEB3FORMS_ACCESS_KEY = 'f7c2dab0-0146-4fc3-824f-5a2b4df48e06';
+
 export function EnquirySection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -24,16 +26,46 @@ export function EnquirySection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `New LUXE Enquiry from ${formData.name}`,
+          from_name: 'LUXE Fitness Website',
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          interested_in: formData.interest,
+          preferred_time: formData.time,
+        }),
+      });
 
-    toast({
-      title: 'Request Received',
-      description: "Thank you for your interest. We'll contact you shortly.",
-    });
+      const result = await response.json();
 
-    setFormData({ name: '', phone: '', email: '', interest: '', time: '' });
-    setIsSubmitting(false);
+      if (result.success) {
+        toast({
+          title: 'Request Received',
+          description: "Thank you for your interest. We'll contact you shortly.",
+        });
+        setFormData({ name: '', phone: '', email: '', interest: '', time: '' });
+      } else {
+        throw new Error(result.message || 'Form submission failed');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: 'Submission Failed',
+        description: 'Something went wrong. Please try again or call us directly.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -110,10 +142,10 @@ export function EnquirySection() {
                 className="input-dark"
               >
                 <option value="">Interested In</option>
-                <option value="tour">Private Tour</option>
-                <option value="membership">Membership Enquiry</option>
-                <option value="training">Personal Training</option>
-                <option value="corporate">Corporate Wellness</option>
+                <option value="Private Tour">Private Tour</option>
+                <option value="Membership Enquiry">Membership Enquiry</option>
+                <option value="Personal Training">Personal Training</option>
+                <option value="Corporate Wellness">Corporate Wellness</option>
               </select>
 
               <select
@@ -124,9 +156,9 @@ export function EnquirySection() {
                 className="input-dark"
               >
                 <option value="">Preferred Time</option>
-                <option value="morning">Morning (5 AM - 12 PM)</option>
-                <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
-                <option value="evening">Evening (5 PM - 11 PM)</option>
+                <option value="Morning (5 AM - 12 PM)">Morning (5 AM - 12 PM)</option>
+                <option value="Afternoon (12 PM - 5 PM)">Afternoon (12 PM - 5 PM)</option>
+                <option value="Evening (5 PM - 11 PM)">Evening (5 PM - 11 PM)</option>
               </select>
             </div>
 
