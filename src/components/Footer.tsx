@@ -100,14 +100,14 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-cream/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-cream/40 text-xs font-body">
+            <p className="text-cream/60 text-xs font-body">
               © 2024 LUXE Fitness & Wellness. All rights reserved.
             </p>
             <div className="flex gap-6">
-              <button className="text-cream/40 hover:text-cream/80 text-xs font-body transition-colors">
+              <button className="text-cream/60 hover:text-cream/80 text-xs font-body transition-colors">
                 Privacy Policy
               </button>
-              <button className="text-cream/40 hover:text-cream/80 text-xs font-body transition-colors">
+              <button className="text-cream/60 hover:text-cream/80 text-xs font-body transition-colors">
                 Terms of Service
               </button>
             </div>
