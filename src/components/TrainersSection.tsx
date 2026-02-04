@@ -70,6 +70,8 @@ export function TrainersSection() {
                     src={trainer.image}
                     alt={trainer.name}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/0 transition-colors duration-500" />
                 </div>

@@ -42,6 +42,8 @@ export function AboutSection() {
                 src={aboutImage}
                 alt="LUXE Studio Interior"
                 className="w-full h-[500px] lg:h-[600px] object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             {/* Decorative element */}

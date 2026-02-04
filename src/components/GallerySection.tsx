@@ -63,6 +63,8 @@ export function GallerySection() {
                   className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
                     index === 0 || index === 3 ? 'h-full min-h-[400px]' : 'h-64 md:h-72'
                   }`}
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/40 transition-colors duration-300 flex items-end">
