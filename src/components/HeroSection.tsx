@@ -1,12 +1,7 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import heroImage from '@/assets/hero-gym.jpg';
 
 export function HeroSection() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
   const scrollToAbout = () => {
     const element = document.querySelector('#about');
     if (element) {
@@ -16,11 +11,8 @@ export function HeroSection() {
 
   return (
     <section className="relative h-screen min-h-[700px] overflow-hidden">
-      {/* Background Image with Parallax */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 w-full h-[120%]"
-      >
+      {/* Background Image - static to avoid reflow */}
+      <div className="absolute inset-0 w-full h-full">
         <img
           src={heroImage}
           alt="LUXE Fitness Interior"
@@ -29,48 +21,25 @@ export function HeroSection() {
           decoding="async"
         />
         <div className="image-overlay" />
-      </motion.div>
+      </div>
 
-      {/* Content */}
-      <motion.div
-        style={{ opacity }}
-        className="relative h-full flex flex-col items-center justify-center text-center px-6"
-      >
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-gold text-sm md:text-base tracking-[0.3em] uppercase mb-6 font-body"
-        >
+      {/* Content with CSS animations instead of JS-driven */}
+      <div className="relative h-full flex flex-col items-center justify-center text-center px-6 animate-fade-in">
+        <p className="text-gold text-sm md:text-base tracking-[0.3em] uppercase mb-6 font-body opacity-0 animate-[fade-in-up_0.8s_ease-out_0.2s_forwards]">
           Where Fitness Meets Luxury
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="font-display text-4xl md:text-6xl lg:text-7xl text-cream font-medium mb-6 max-w-4xl"
-        >
+        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-cream font-medium mb-6 max-w-4xl opacity-0 animate-[fade-in-up_0.8s_ease-out_0.4s_forwards]">
           Elevate Your
           <br />
           <span className="italic">Wellness Journey</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="font-body text-cream/80 text-lg md:text-xl max-w-2xl mb-10 font-light"
-        >
+        <p className="font-body text-cream/80 text-lg md:text-xl max-w-2xl mb-10 font-light opacity-0 animate-[fade-in-up_0.8s_ease-out_0.6s_forwards]">
           Experience fitness reimagined at Hyderabad's most exclusive wellness destination
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4"
-        >
+        <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-[fade-in-up_0.8s_ease-out_0.8s_forwards]">
           <button
             onClick={() => document.querySelector('#enquiry')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-gold"
@@ -83,20 +52,17 @@ export function HeroSection() {
           >
             Explore Membership
           </button>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Scroll Indicator */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
+      <button
         onClick={scrollToAbout}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-cream/60 hover:text-cream transition-colors duration-300"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-cream/60 hover:text-cream transition-colors duration-300 opacity-0 animate-[fade-in_0.8s_ease-out_1.2s_forwards]"
         aria-label="Scroll to explore"
       >
         <ChevronDown className="w-8 h-8 animate-bounce" />
-      </motion.button>
+      </button>
     </section>
   );
 }

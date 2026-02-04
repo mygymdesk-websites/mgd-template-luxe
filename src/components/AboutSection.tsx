@@ -1,6 +1,4 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Users, Sparkles, Crown } from 'lucide-react';
 import aboutImage from '@/assets/about-studio.jpg';
 
@@ -23,19 +21,37 @@ const pillars = [
 ];
 
 export function AboutSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const ref = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '-100px' }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="about" className="section-padding bg-cream" ref={ref}>
       <div className="container-luxe">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="relative"
+          <div
+            className={`relative transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+            }`}
+            style={{ willChange: 'transform, opacity' }}
           >
             <div className="img-zoom">
               <img
@@ -48,13 +64,14 @@ export function AboutSection() {
             </div>
             {/* Decorative element */}
             <div className="absolute -bottom-6 -right-6 w-32 h-32 border-2 border-gold -z-10 hidden lg:block" />
-          </motion.div>
+          </div>
 
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <div
+            className={`transition-all duration-700 ease-out delay-200 ${
+              isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+            }`}
+            style={{ willChange: 'transform, opacity' }}
           >
             <p className="section-label">Our Philosophy</p>
             <h2 className="section-title">
@@ -71,12 +88,15 @@ export function AboutSection() {
             {/* Pillars */}
             <div className="space-y-6">
               {pillars.map((pillar, index) => (
-                <motion.div
+                <div
                   key={pillar.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  className="flex items-start gap-4"
+                  className={`flex items-start gap-4 transition-all duration-500 ease-out ${
+                    isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+                  }`}
+                  style={{ 
+                    transitionDelay: `${400 + index * 100}ms`,
+                    willChange: 'transform, opacity'
+                  }}
                 >
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gold/10">
                     <pillar.icon className="w-5 h-5 text-gold" />
@@ -89,10 +109,10 @@ export function AboutSection() {
                       {pillar.description}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
