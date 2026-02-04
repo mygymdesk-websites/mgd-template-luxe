@@ -139,6 +139,7 @@ export function EnquirySection() {
                 value={formData.interest}
                 onChange={handleChange}
                 required
+                aria-label="Interested In"
                 className="input-dark"
               >
                 <option value="">Interested In</option>
@@ -153,6 +154,7 @@ export function EnquirySection() {
                 value={formData.time}
                 onChange={handleChange}
                 required
+                aria-label="Preferred Time"
                 className="input-dark"
               >
                 <option value="">Preferred Time</option>
