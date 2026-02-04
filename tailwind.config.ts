@@ -122,6 +122,7 @@ export default {
         "slide-in-right": "slide-in-right 0.3s ease-out",
         "slide-in-left": "slide-in-left 0.3s ease-out",
         float: "float 3s ease-in-out infinite",
+        bounce: "bounce 1s infinite",
       },
       boxShadow: {
         soft: "var(--shadow-soft)",

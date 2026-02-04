@@ -3,7 +3,7 @@ import { Navigation } from '@/components/Navigation';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
 
-// Lazy load below-fold components to reduce initial bundle and main-thread work
+// Lazy load below-fold components to reduce initial bundle
 const AmenitiesSection = lazy(() => import('@/components/AmenitiesSection').then(m => ({ default: m.AmenitiesSection })));
 const MembershipSection = lazy(() => import('@/components/MembershipSection').then(m => ({ default: m.MembershipSection })));
 const TrainersSection = lazy(() => import('@/components/TrainersSection').then(m => ({ default: m.TrainersSection })));
@@ -15,7 +15,7 @@ const Footer = lazy(() => import('@/components/Footer').then(m => ({ default: m.
 const MobileBottomCTA = lazy(() => import('@/components/MobileBottomCTA').then(m => ({ default: m.MobileBottomCTA })));
 
 // Minimal fallback that doesn't cause layout shift
-const SectionFallback = () => <div className="min-h-[200px]" />;
+const SectionFallback = () => <div className="min-h-[200px]" aria-hidden="true" />;
 
 const Index = () => {
   return (

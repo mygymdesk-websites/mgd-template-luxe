@@ -1,5 +1,4 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useInView } from '@/hooks/useInView';
 
 const trainers = [
   {
@@ -33,35 +32,36 @@ const trainers = [
 ];
 
 export function TrainersSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
 
   return (
     <section id="trainers" className="section-padding bg-cream-dark" ref={ref}>
       <div className="container-luxe">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <p className="section-label">Our Team</p>
           <h2 className="section-title">Meet Your Coaches</h2>
           <p className="section-subtitle mx-auto">
             Certified experts dedicated to your transformation
           </p>
-        </motion.div>
+        </div>
 
         {/* Trainers Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {trainers.map((trainer, index) => (
-            <motion.div
+            <div
               key={trainer.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="group"
+              className={`group transition-all duration-500 ease-out ${
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ 
+                transitionDelay: `${150 + index * 150}ms`,
+                willChange: 'transform, opacity'
+              }}
             >
               <div className="card-luxury overflow-hidden">
                 {/* Image */}
@@ -69,6 +69,8 @@ export function TrainersSection() {
                   <img
                     src={trainer.image}
                     alt={trainer.name}
+                    width={400}
+                    height={500}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                     loading="lazy"
                     decoding="async"
@@ -99,7 +101,7 @@ export function TrainersSection() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

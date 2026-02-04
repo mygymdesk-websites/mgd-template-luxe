@@ -1,12 +1,11 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { useInView } from '@/hooks/useInView';
 
 const WEB3FORMS_ACCESS_KEY = 'f7c2dab0-0146-4fc3-824f-5a2b4df48e06';
 
 export function EnquirySection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -77,11 +76,10 @@ export function EnquirySection() {
       <div className="container-luxe">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
+          <div
+            className={`text-center mb-12 transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
           >
             <p className="text-gold text-xs tracking-[0.25em] uppercase mb-4 font-body">
               Get Started
@@ -92,15 +90,15 @@ export function EnquirySection() {
             <p className="text-cream/60 text-lg font-body font-light">
               Schedule a private tour and experience LUXE firsthand
             </p>
-          </motion.div>
+          </div>
 
           {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <form
             onSubmit={handleSubmit}
-            className="space-y-6"
+            className={`space-y-6 transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ transitionDelay: '200ms' }}
           >
             <div className="grid md:grid-cols-2 gap-6">
               <input
@@ -110,6 +108,7 @@ export function EnquirySection() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                aria-label="Full Name"
                 className="input-dark"
               />
               <input
@@ -119,6 +118,7 @@ export function EnquirySection() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+                aria-label="Phone Number"
                 className="input-dark"
               />
             </div>
@@ -130,6 +130,7 @@ export function EnquirySection() {
               value={formData.email}
               onChange={handleChange}
               required
+              aria-label="Email Address"
               className="input-dark"
             />
 
@@ -171,14 +172,14 @@ export function EnquirySection() {
             >
               {isSubmitting ? 'Submitting...' : 'Request Callback'}
             </button>
-          </motion.form>
+          </form>
 
           {/* Alternative CTA */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-center text-cream/60 text-sm mt-8 font-body"
+          <p
+            className={`text-center text-cream/60 text-sm mt-8 font-body transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ transitionDelay: '400ms' }}
           >
             Or call us directly:{' '}
             <a
@@ -187,7 +188,7 @@ export function EnquirySection() {
             >
               +91 98765 43210
             </a>
-          </motion.p>
+          </p>
         </div>
       </div>
     </section>

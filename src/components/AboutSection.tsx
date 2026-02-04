@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
 import { Users, Sparkles, Crown } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 import aboutImage from '@/assets/about-studio.jpg';
 
 const pillars = [
@@ -21,26 +21,7 @@ const pillars = [
 ];
 
 export function AboutSection() {
-  const ref = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '-100px' }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref, isInView } = useInView<HTMLElement>();
 
   return (
     <section id="about" className="section-padding bg-cream" ref={ref}>
@@ -51,13 +32,14 @@ export function AboutSection() {
             className={`relative transition-all duration-700 ease-out ${
               isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
             }`}
-            style={{ willChange: 'transform, opacity' }}
           >
             <div className="img-zoom">
               <img
                 src={aboutImage}
                 alt="LUXE Studio Interior"
                 className="w-full h-[500px] lg:h-[600px] object-cover"
+                width={800}
+                height={600}
                 loading="lazy"
                 decoding="async"
               />
@@ -68,10 +50,10 @@ export function AboutSection() {
 
           {/* Content */}
           <div
-            className={`transition-all duration-700 ease-out delay-200 ${
+            className={`transition-all duration-700 ease-out ${
               isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
             }`}
-            style={{ willChange: 'transform, opacity' }}
+            style={{ transitionDelay: '200ms' }}
           >
             <p className="section-label">Our Philosophy</p>
             <h2 className="section-title">
@@ -93,10 +75,7 @@ export function AboutSection() {
                   className={`flex items-start gap-4 transition-all duration-500 ease-out ${
                     isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
                   }`}
-                  style={{ 
-                    transitionDelay: `${400 + index * 100}ms`,
-                    willChange: 'transform, opacity'
-                  }}
+                  style={{ transitionDelay: `${400 + index * 100}ms` }}
                 >
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gold/10">
                     <pillar.icon className="w-5 h-5 text-gold" />

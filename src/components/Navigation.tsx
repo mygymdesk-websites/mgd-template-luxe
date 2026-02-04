@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
@@ -14,13 +13,17 @@ const navLinks = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Trigger header animation on mount
+    requestAnimationFrame(() => setIsVisible(true));
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -34,11 +37,10 @@ export function Navigation() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+      <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        } ${
           isScrolled
             ? 'bg-cream/95 glass shadow-soft py-4'
             : 'bg-transparent py-6'
@@ -93,62 +95,54 @@ export function Navigation() {
             <Menu className="w-6 h-6" />
           </button>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 mobile-menu-overlay"
-          >
-            <div className="h-full flex flex-col">
-              {/* Header */}
-              <div className="flex items-center justify-between px-6 py-6">
-                <span className="font-display text-2xl font-semibold text-cream">
-                  LUXE
-                </span>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-cream"
-                  aria-label="Close menu"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Navigation Links */}
-              <nav className="flex-1 flex flex-col items-center justify-center gap-8">
-                {navLinks.map((link, index) => (
-                  <motion.button
-                    key={link.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => scrollToSection(link.href)}
-                    className="font-display text-3xl text-cream hover:text-gold transition-colors duration-300"
-                  >
-                    {link.label}
-                  </motion.button>
-                ))}
-              </nav>
-
-              {/* CTA Button */}
-              <div className="px-6 pb-10">
-                <button
-                  onClick={() => scrollToSection('#enquiry')}
-                  className="w-full btn-gold"
-                >
-                  Book a Tour
-                </button>
-              </div>
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-50 mobile-menu-overlay animate-fade-in"
+        >
+          <div className="h-full flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-6">
+              <span className="font-display text-2xl font-semibold text-cream">
+                LUXE
+              </span>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 text-cream"
+                aria-label="Close menu"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+            {/* Navigation Links */}
+            <nav className="flex-1 flex flex-col items-center justify-center gap-8">
+              {navLinks.map((link, index) => (
+                <button
+                  key={link.label}
+                  onClick={() => scrollToSection(link.href)}
+                  className="font-display text-3xl text-cream hover:text-gold transition-colors duration-300 opacity-0 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </nav>
+
+            {/* CTA Button */}
+            <div className="px-6 pb-10">
+              <button
+                onClick={() => scrollToSection('#enquiry')}
+                className="w-full btn-gold"
+              >
+                Book a Tour
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

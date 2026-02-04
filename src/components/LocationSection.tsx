@@ -1,51 +1,55 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 export function LocationSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
+  const { ref: mapRef, isInView: isMapInView } = useInView<HTMLDivElement>({ rootMargin: '200px' });
 
   return (
     <section id="contact" className="section-padding bg-cream" ref={ref}>
       <div className="container-luxe">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <p className="section-label">Location</p>
           <h2 className="section-title">Visit Us</h2>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Map */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="h-[400px] lg:h-full min-h-[400px] bg-cream-dark"
+          {/* Map - Lazy loaded */}
+          <div
+            ref={mapRef}
+            className={`h-[400px] lg:h-full min-h-[400px] bg-cream-dark transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+            }`}
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.2714766936397!2d78.40691931487756!3d17.44535388804182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb90c3d2ea5d0b%3A0x8b6e1e3d8e6d8d8e!2sJubilee%20Hills%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="LUXE Fitness Location"
-            />
-          </motion.div>
+            {isMapInView ? (
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.2714766936397!2d78.40691931487756!3d17.44535388804182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb90c3d2ea5d0b%3A0x8b6e1e3d8e6d8d8e!2sJubilee%20Hills%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="LUXE Fitness Location"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted">
+                <MapPin className="w-12 h-12 opacity-30" />
+              </div>
+            )}
+          </div>
 
           {/* Contact Details */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
+          <div
+            className={`space-y-8 transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+            }`}
+            style={{ transitionDelay: '200ms' }}
           >
             {/* Address */}
             <div className="flex gap-4">
@@ -118,7 +122,7 @@ export function LocationSection() {
                 Complimentary valet parking for all members
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

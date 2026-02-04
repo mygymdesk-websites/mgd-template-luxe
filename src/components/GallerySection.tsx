@@ -1,6 +1,6 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { X } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 import gallerySpa from '@/assets/gallery-spa.jpg';
 import galleryReception from '@/assets/gallery-reception.jpg';
@@ -19,8 +19,7 @@ const galleryImages = [
 ];
 
 export function GallerySection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { ref, isInView } = useInView<HTMLElement>();
   const [lightboxImage, setLightboxImage] = useState<{
     src: string;
     caption: string;
@@ -31,35 +30,39 @@ export function GallerySection() {
       <section id="gallery" className="section-padding bg-cream-dark" ref={ref}>
         <div className="container-luxe">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+          <div
+            className={`text-center mb-16 transition-all duration-700 ease-out ${
+              isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
           >
             <p className="section-label">Gallery</p>
             <h2 className="section-title">A Glimpse Inside</h2>
             <p className="section-subtitle mx-auto">
               Explore the spaces designed for your wellness journey
             </p>
-          </motion.div>
+          </div>
 
           {/* Gallery Grid - Masonry Style */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {galleryImages.map((image, index) => (
-              <motion.button
+              <button
                 key={image.caption}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
                 onClick={() => setLightboxImage(image)}
-                className={`relative overflow-hidden group cursor-pointer ${
+                className={`relative overflow-hidden group cursor-pointer transition-all duration-500 ease-out ${
+                  isInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                } ${
                   index === 0 || index === 3 ? 'row-span-2' : ''
                 }`}
+                style={{ 
+                  transitionDelay: `${150 + index * 100}ms`,
+                  willChange: 'transform, opacity'
+                }}
               >
                 <img
                   src={image.src}
                   alt={image.caption}
+                  width={index === 0 || index === 3 ? 600 : 400}
+                  height={index === 0 || index === 3 ? 800 : 288}
                   className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
                     index === 0 || index === 3 ? 'h-full min-h-[400px]' : 'h-64 md:h-72'
                   }`}
@@ -72,7 +75,7 @@ export function GallerySection() {
                     {image.caption}
                   </p>
                 </div>
-              </motion.button>
+              </button>
             ))}
           </div>
         </div>
@@ -80,11 +83,8 @@ export function GallerySection() {
 
       {/* Lightbox */}
       {lightboxImage && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-navy/95 flex items-center justify-center p-4"
+        <div
+          className="fixed inset-0 z-50 bg-navy/95 flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setLightboxImage(null)}
         >
           <button
@@ -104,7 +104,7 @@ export function GallerySection() {
               {lightboxImage.caption}
             </p>
           </div>
-        </motion.div>
+        </div>
       )}
     </>
   );
