@@ -19,6 +19,15 @@
     <!-- Fonts preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" as="style" />
+    
+    <!-- Inline critical CSS for above-the-fold content -->
+    <style>
+      body { margin: 0; font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif; background: #FEFBF6; }
+      .hero-loading { min-height: 100vh; background: #1A1F3D; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
