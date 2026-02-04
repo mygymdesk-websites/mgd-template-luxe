@@ -25,6 +25,8 @@ export function HeroSection() {
           src={heroImage}
           alt="LUXE Fitness Interior"
           className="w-full h-full object-cover"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="image-overlay" />
       </motion.div>
